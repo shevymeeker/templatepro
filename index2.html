@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Business Template - Easy Rebrand</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // We tell Tailwind to use these variables instead of fixed colors
+                        primary: 'var(--primary-color)',
+                        secondary: 'var(--secondary-color)',
+                        dark: '#1a202c',
+                        light: '#f7fafc',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==================================================================
+           THIS IS THE SECTION YOU PASTE NEW COLORS INTO
+           ================================================================== */
+        :root {
+            /* Default Blue theme - These will change when you upload a logo */
+            --primary-color: #2563eb;  /* Used for main buttons, hero background */
+            --secondary-color: #1e40af; /* Used for accents, hover states */
+            --text-dark: #1a202c;
+            --text-light: #ffffff;
+        }
+        /* ================================================================== */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+        }
+
+        /* Utility to ensure the logo image doesn't stretch weirdly */
+        #brand-logo {
+            max-height: 50px;
+            width: auto;
+        }
+
+        /* Styling for the floating Admin Panel */
+        #admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 9999;
+            width: 300px;
+            border: 2px solid var(--primary-color);
+        }
+        #css-output {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 5px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <header class="bg-white shadow-sm fixed w-full z-50 top-0">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <img id="brand-logo" src="https://placehold.co/150x50?text=Your+Logo" alt="Brand Logo" crossorigin="anonymous">
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#services" class="text-dark hover:text-primary transition">Services</a>
+                <a href="#about" class="text-dark hover:text-primary transition">About</a>
+                <a href="#contact" class="px-6 py-2 bg-primary text-white rounded-full hover:bg-secondary transition font-semibold shadow-md">
+                    Call Now: (555) 123-4567
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" class="outline-none mobile-menu-button">
+                    <i class="fas fa-bars text-2xl text-primary"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="hidden mobile-menu md:hidden fixed w-full bg-white shadow-lg top-[70px] z-40">
+        <ul class="">
+            <li><a href="#services" class="block text-sm px-6 py-4 text-dark hover:bg-primary hover:text-white transition font-semibold">Services</a></li>
+            <li><a href="#about" class="block text-sm px-6 py-4 text-dark hover:bg-primary hover:text-white transition font-semibold">About Us</a></li>
+            <li><a href="#contact" class="block text-sm px-6 py-4 text-primary font-bold hover:bg-primary hover:text-white transition">Contact Us</a></li>
+        </ul>
+    </div>
+
+    <main class="mt-[70px]">
+        <section class="bg-primary text-white py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0 animate-fade-in-up">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                        Clear Headline Stating Exactly What You Do.
+                    </h1>
+                    <p class="text-xl mb-8 text-blue-100">
+                        A sub-headline that addresses the customer's primary anxiety or desire. Don't be clever, be clear.
+                    </p>
+                    <a href="#contact" class="px-8 py-4 bg-white text-primary font-bold rounded-full hover:bg-secondary hover:text-white transition shadow-lg inline-block">
+                        Schedule a Free Consultation Now
+                    </a>
+                </div>
+                <div class="md:w-1/2 md:pl-12 animate-fade-in">
+                    <img src="https://placehold.co/600x400?text=Hero+Image+Showing+Success" alt="Happy Customer" class="rounded-lg shadow-2xl transform rotate-2 hover:rotate-0 transition duration-500">
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20 container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Are You Tired Of [Client's Main Problem]?</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">We understand how frustrating it is when [describe the pain of the current situation]. That's why we offer reliable solutions.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-primary hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-tools text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Service Benefit #1</h3>
+                    <p class="text-gray-600">Describe the service and crucially, the *result* the client gets from it.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-primary hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Service Benefit #2</h3>
+                    <p class="text-gray-600">Focus on speed, reliability, or quality. What makes you different?</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-primary hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-hand-holding-usd text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Service Benefit #3</h3>
+                    <p class="text-gray-600">The final strong reason they should choose your business over competitors.</p>
+                </div>
+            </div>
+        </section>
+
+         <section class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-dark mb-12">Our Simple 3-Step Process</h2>
+                <div class="flex flex-col md:flex-row justify-center items-start space-y-8 md:space-y-0 md:space-x-12">
+                    <div class="flex-1 relative">
+                        <div class="w-12 h-12 bg-primary text-white font-bold rounded-full flex items-center justify-center mx-auto mb-6 text-xl relative z-10">1</div>
+                        <h3 class="text-xl font-bold mb-2">Schedule An Appointment</h3>
+                        <p class="text-gray-600">Fill out our form or give us a call to get started.</p>
+                    </div>
+                    <div class="flex-1 relative">
+                         <div class="hidden md:block absolute top-6 right-[50%] w-full h-1 bg-primary/20 z-0"></div>
+                        <div class="w-12 h-12 bg-primary text-white font-bold rounded-full flex items-center justify-center mx-auto mb-6 text-xl relative z-10">2</div>
+                        <h3 class="text-xl font-bold mb-2">We Do The Work</h3>
+                        <p class="text-gray-600">Our expert team shows up on time and gets the job done right.</p>
+                    </div>
+                    <div class="flex-1 relative">
+                         <div class="hidden md:block absolute top-6 right-[50%] w-full h-1 bg-primary/20 z-0"></div>
+                        <div class="w-12 h-12 bg-primary text-white font-bold rounded-full flex items-center justify-center mx-auto mb-6 text-xl relative z-10">3</div>
+                        <h3 class="text-xl font-bold mb-2">Enjoy The Results</h3>
+                        <p class="text-gray-600">Sit back and relax knowing your problem is solved.</p>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <a href="#contact" class="px-8 py-4 bg-primary text-white font-bold rounded-full hover:bg-secondary transition shadow-lg inline-block">
+                        Start Step 1 Today
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 container mx-auto px-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <img src="https://placehold.co/600x500?text=Team+or+Owner+Photo" alt="Our Team" class="rounded-xl shadow-xl">
+            </div>
+            <div class="md:w-1/2 md:pl-16">
+                <h4 class="text-primary font-bold mb-2 uppercase tracking-wider">Why Trust Us</h4>
+                <h2 class="text-3xl font-bold text-dark mb-6">We've Been Serving [City Name] For Over X Years.</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Establish empathy and authority here. "We know how hard it is to find a reliable [service provider]. That's why we built our business on transparency and quality." Mention licenses, awards, or years in business.
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-primary mr-3"></i> Licensed and Insured</li>
+                    <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-primary mr-3"></i> 100% Satisfaction Guarantee</li>
+                    <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-primary mr-3"></i> Locally Owned & Operated</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="bg-dark text-gray-300 py-16">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h3 class="text-white text-2xl font-bold mb-6">Your Business Name</h3>
+                <p class="mb-6">A short sentence summarizing your value proposition.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-white text-xl font-bold mb-6">Contact Info</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 text-primary"></i> 123 Main Street, Your City, ST 12345</li>
+                    <li class="flex items-center"><i class="fas fa-phone-alt mr-3 text-primary"></i> (555) 123-4567</li>
+                    <li class="flex items-center"><i class="fas fa-envelope mr-3 text-primary"></i> info@yourbusiness.com</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white text-xl font-bold mb-6">Quick Links</h3>
+                <ul class="space-y-3">
+                    <li><a href="#services" class="hover:text-primary transition">Services</a></li>
+                    <li><a href="#about" class="hover:text-primary transition">About Us</a></li>
+                    <li><a href="#" class="hover:text-primary transition">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 mt-12 pt-8 border-t border-gray-800 text-center sm:flex justify-between items-center">
+            <p>&copy; 2023 Your Business Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="admin-panel">
+        <h3 class="font-bold text-lg mb-4 text-dark"><i class="fas fa-palette text-primary mr-2"></i>Instant Rebrand</h3>
+        <p class="text-sm text-gray-600 mb-3">Upload client logo to auto-color the site.</p>
+        <input type="file" id="logo-upload" accept="image/*" class="block w-full text-sm text-slate-500
+          file:mr-4 file:py-2 file:px-4
+          file:rounded-full file:border-0
+          file:text-sm file:font-semibold
+          file:bg-primary/10 file:text-primary
+          hover:file:bg-primary/20
+          cursor-pointer mb-4
+        "/>
+        <p class="text-xs font-bold text-gray-700 mb-1">Copy this code to save colors:</p>
+        <textarea id="css-output" readonly>Upload a logo first...</textarea>
+    </div>
+    <script>
+        // --- 1. Mobile Navigation Toggle ---
+        const btn = document.getElementById("mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                 menu.classList.add("hidden");
+            })
+        });
+
+
+        // --- 2. THE INSTANT REBRAND LOGIC (ColorThief) ---
+        const colorThief = new ColorThief();
+        const logoUpload = document.getElementById('logo-upload');
+        const brandLogoImg = document.getElementById('brand-logo');
+        const cssOutput = document.getElementById('css-output');
+        const root = document.documentElement;
+
+        // Helper function to convert RGB array to Hex format
+        const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }).join('');
+
+        logoUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // 1. Update the logo image on the page instantly
+                    brandLogoImg.src = e.target.result;
+
+                    // 2. Wait for image to load into DOM, then steal colors
+                    if (brandLogoImg.complete) {
+                        extractColors(brandLogoImg);
+                    } else {
+                        brandLogoImg.addEventListener('load', function() {
+                            extractColors(brandLogoImg);
+                        });
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function extractColors(imgElement) {
+            // Get Dominant Color (for Primary)
+            const dominantRgb = colorThief.getColor(imgElement);
+            const primaryHex = rgbToHex(dominantRgb[0], dominantRgb[1], dominantRgb[2]);
+
+            // Get Palette (Find a secondary color that isn't too similar to primary)
+            const palette = colorThief.getPalette(imgElement, 5);
+            let secondaryHex = rgbToHex(palette[1][0], palette[1][1], palette[1][2]);
+
+            // 3. Repaint the website instantly using CSS variables
+            root.style.setProperty('--primary-color', primaryHex);
+            // Making secondary slightly darker variant of the second palette color for contrast
+            root.style.setProperty('--secondary-color', secondaryHex);
+
+            // 4. Generate the code snippet for the user to copy
+            const cssSnippet = `/* PASTE YOUR NEW COLORS HERE */
+:root {
+  --primary-color: ${primaryHex};
+  --secondary-color: ${secondaryHex};
+  --text-dark: #1a202c;
+  --text-light: #ffffff;
+}`;
+            cssOutput.value = cssSnippet;
+        }
+    </script>
+</body>
+</html>
