@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Get Your Free Quote</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --primary-rgb: 37, 99, 235;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .btn-primary {
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+        }
+
+        .logo-preview {
+            max-height: 50px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 340px;
+            z-index: 1000;
+            display: none;
+        }
+        .admin-panel.active { display: block; }
+
+        @media (max-width: 768px) {
+            .admin-panel {
+                width: calc(100% - 32px);
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+
+        textarea {
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        #quoteForm {
+            display: none;
+        }
+        #quoteForm.active {
+            display: block;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 24px;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+        .file-upload-label.has-file {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--primary-color)',
+                        secondary: 'var(--secondary-color)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased bg-gray-50">
+    
+    <!-- Simple Header -->
+    <nav class="bg-white shadow-sm py-4">
+        <div class="max-w-6xl mx-auto px-4 flex justify-center items-center">
+            <div id="logo-container" class="flex items-center">
+                <span id="navBrand" class="text-2xl font-bold text-gray-900">Your Company</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-2xl mx-auto text-center">
+            <h1 id="heroHeadline" class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                We Solve Your Problem Fast
+            </h1>
+            <p id="heroSubtext" class="text-xl text-gray-600 mb-12 leading-relaxed">
+                The job others won't touch? That's what we do best. Send us a picture and get your free quote in minutes.
+            </p>
+        </div>
+    </section>
+
+    <!-- The Problem/Solution (Condensed) -->
+    <section class="py-12 px-4 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">The Problem</h2>
+                    <p id="problemText" class="text-lg text-gray-600 leading-relaxed mb-6">
+                        Other companies turn down tough jobs. Overgrown yards, difficult access, challenging terrain—if it's hard, they're not interested.
+                    </p>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Solution</h2>
+                    <p id="solutionText" class="text-lg text-gray-600 leading-relaxed mb-6">
+                        We specialize in the jobs nobody else wants. Fast response, fair pricing, and we show up ready to work.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="py-16 px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">What We Handle</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 id="service1" class="text-xl font-bold text-gray-900 mb-3">Overgrown Properties</h3>
+                    <p class="text-gray-600">Lot clearing, brush removal, reclaiming abandoned spaces</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 id="service2" class="text-xl font-bold text-gray-900 mb-3">Difficult Access</h3>
+                    <p class="text-gray-600">Steep slopes, tight spaces, hard-to-reach areas</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 id="service3" class="text-xl font-bold text-gray-900 mb-3">Emergency Work</h3>
+                    <p class="text-gray-600">Storm cleanup, fallen trees, urgent repairs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section with Photo Upload -->
+    <section class="py-20 px-4 bg-primary">
+        <div class="max-w-3xl mx-auto text-center">
+            <div class="mb-8 animate-float">
+                <div id="ctaLogo" class="inline-block bg-white p-6 rounded-full shadow-lg">
+                    <svg class="w-16 h-16 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Send a Photo, Get Your Free Quote</h2>
+            <p class="text-xl text-white/90 mb-8">Takes 60 seconds. We'll text you back with a price.</p>
+            <button onclick="showQuoteForm()" class="bg-white text-primary px-10 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition shadow-lg">
+                Start Here
+            </button>
+        </div>
+    </section>
+
+    <!-- Quote Form (Hidden Initially) -->
+    <section id="quoteForm" class="py-16 px-4 bg-white">
+        <div class="max-w-2xl mx-auto">
+            <button onclick="hideQuoteForm()" class="text-gray-600 hover:text-gray-900 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back
+            </button>
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Get Your Quote</h2>
+            <form id="submitQuote" class="space-y-6">
+                
+                <!-- Photo Upload -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Photo of the Job</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="jobPhoto" accept="image/*" capture="environment" required>
+                        <label for="jobPhoto" id="photoLabel" class="file-upload-label">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span id="photoText" class="text-gray-700 font-medium">Take or Upload Photo</span>
+                        </label>
+                    </div>
+                    <div id="photoPreview" class="mt-4 hidden">
+                        <img id="previewImg" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg">
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">What needs to be done?</label>
+                    <textarea id="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Describe the work you need..." required></textarea>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Job Address</label>
+                    <input type="text" id="address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="123 Main St, City, State" required>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Your Phone Number</label>
+                    <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="(555) 555-5555" required>
+                </div>
+
+                <!-- Name -->
+                <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Your Name</label>
+                    <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="John Smith" required>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="w-full btn-primary text-white px-8 py-4 rounded-lg font-bold text-lg">
+                    Send My Quote Request
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Simple Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <div id="footerBrand" class="text-xl font-bold mb-4">Your Company</div>
+            <p class="text-gray-400 text-sm">&copy; 2024 All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Admin Panel (Hidden, press Alt+A) -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-900 text-lg">Brand Manager</h3>
+            <button onclick="toggleAdmin()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        
+        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Client Logo</label>
+        <input type="file" id="logoUpload" accept="image/*" class="block w-full text-sm text-gray-600 mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-primary hover:file:bg-primary hover:file:text-white file:transition file:cursor-pointer cursor-pointer">
+        
+        <div id="colorPreview" class="hidden mb-4">
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <div id="primarySwatch" class="h-12 rounded-lg border-2 border-gray-200 shadow-sm"></div>
+                    <p class="text-xs text-gray-600 mt-1.5 font-medium">Primary</p>
+                </div>
+                <div>
+                    <div id="secondarySwatch" class="h-12 rounded-lg border-2 border-gray-200 shadow-sm"></div>
+                    <p class="text-xs text-gray-600 mt-1.5 font-medium">Secondary</p>
+                </div>
+            </div>
+        </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">Company Phone (SMS)</label>
+        <input type="tel" id="companyPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-primary" placeholder="(555) 555-5555">
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">CSS Variables</label>
+        <textarea id="cssOutput" rows="5" class="w-full p-3 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-primary" readonly placeholder="Upload logo to generate..."></textarea>
+        <p class="text-xs text-gray-500 mt-2">Click to select and copy</p>
+    </div>
+
+    <script>
+        const colorThief = new ColorThief();
+        const logoUpload = document.getElementById('logoUpload');
+        const logoContainer = document.getElementById('logo-container');
+        const cssOutput = document.getElementById('cssOutput');
+        const colorPreview = document.getElementById('colorPreview');
+        const primarySwatch = document.getElementById('primarySwatch');
+        const secondarySwatch = document.getElementById('secondarySwatch');
+        const adminPanel = document.getElementById('adminPanel');
+
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join('');
+        }
+
+        function adjustBrightness(hex, percent) {
+            const num = parseInt(hex.replace("#",""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+            const G = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + amt));
+            const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+            return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        logoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = function() {
+                    // Display logo in navbar
+                    logoContainer.innerHTML = `<img src="${event.target.result}" class="logo-preview" alt="Client Logo">`;
+                    
+                    // Extract colors
+                    const dominantColor = colorThief.getColor(img);
+                    const palette = colorThief.getPalette(img, 5);
+                    
+                    const primaryHex = rgbToHex(...dominantColor);
+                    const secondaryHex = palette[1] ? rgbToHex(...palette[1]) : adjustBrightness(primaryHex, -25);
+                    
+                    const primaryRgb = hexToRgb(primaryHex);
+                    const secondaryRgb = hexToRgb(secondaryHex);
+                    
+                    // Update CSS variables
+                    document.documentElement.style.setProperty('--primary-color', primaryHex);
+                    document.documentElement.style.setProperty('--secondary-color', secondaryHex);
+                    document.documentElement.style.setProperty('--primary-rgb', `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`);
+                    document.documentElement.style.setProperty('--secondary-rgb', `${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}`);
+                    
+                    // Update swatches
+                    primarySwatch.style.backgroundColor = primaryHex;
+                    secondarySwatch.style.backgroundColor = secondaryHex;
+                    colorPreview.classList.remove('hidden');
+                    
+                    // Update CSS output
+                    cssOutput.value = `:root {\n  --primary-color: ${primaryHex};\n  --secondary-color: ${secondaryHex};\n  --primary-rgb: ${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b};\n  --secondary-rgb: ${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b};\n}`;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Click to select all in textarea
+        cssOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        // Toggle admin panel with Alt+A
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                toggleAdmin();
+            }
+        });
+
+        function toggleAdmin() {
+            adminPanel.classList.toggle('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+        const colorThief = new ColorThief();
+        const logoUpload = document.getElementById('logoUpload');
+        const logoContainer = document.getElementById('logo-container');
+        const cssOutput = document.getElementById('cssOutput');
+        const colorPreview = document.getElementById('colorPreview');
+        const primarySwatch = document.getElementById('primarySwatch');
+        const secondarySwatch = document.getElementById('secondarySwatch');
+        const adminPanel = document.getElementById('adminPanel');
+        const jobPhotoInput = document.getElementById('jobPhoto');
+        const photoLabel = document.getElementById('photoLabel');
+        const photoText = document.getElementById('photoText');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewImg = document.getElementById('previewImg');
+        const quoteForm = document.getElementById('quoteForm');
+        const submitQuote = document.getElementById('submitQuote');
+        const companyPhoneInput = document.getElementById('companyPhone');
+
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join('');
+        }
+
+        function adjustBrightness(hex, percent) {
+            const num = parseInt(hex.replace("#",""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+            const G = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + amt));
+            const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+            return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Logo upload and color extraction
+        logoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = function() {
+                    // Display logo
+                    logoContainer.innerHTML = `<img src="${event.target.result}" class="logo-preview" alt="Logo">`;
+                    document.getElementById('navBrand').style.display = 'none';
+                    document.getElementById('footerBrand').textContent = '';
+                    
+                    // Extract colors
+                    const dominantColor = colorThief.getColor(img);
+                    const palette = colorThief.getPalette(img, 5);
+                    
+                    const primaryHex = rgbToHex(...dominantColor);
+                    const secondaryHex = palette[1] ? rgbToHex(...palette[1]) : adjustBrightness(primaryHex, -25);
+                    
+                    const primaryRgb = hexToRgb(primaryHex);
+                    
+                    // Update CSS variables
+                    document.documentElement.style.setProperty('--primary-color', primaryHex);
+                    document.documentElement.style.setProperty('--secondary-color', secondaryHex);
+                    document.documentElement.style.setProperty('--primary-rgb', `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`);
+                    
+                    // Update swatches
+                    primarySwatch.style.backgroundColor = primaryHex;
+                    secondarySwatch.style.backgroundColor = secondaryHex;
+                    colorPreview.classList.remove('hidden');
+                    
+                    // Update CSS output
+                    cssOutput.value = `:root {\n  --primary-color: ${primaryHex};\n  --secondary-color: ${secondaryHex};\n  --primary-rgb: ${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b};\n}`;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Photo upload preview
+        let uploadedPhotoData = null;
+        jobPhotoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                uploadedPhotoData = event.target.result;
+                previewImg.src = event.target.result;
+                photoPreview.classList.remove('hidden');
+                photoLabel.classList.add('has-file');
+                photoText.textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Show/hide quote form
+        function showQuoteForm() {
+            quoteForm.classList.add('active');
+            quoteForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function hideQuoteForm() {
+            quoteForm.classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Form submission
+        submitQuote.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const description = document.getElementById('description').value;
+            const companyPhone = companyPhoneInput.value || '5555555555'; // Fallback
+            
+            // Build SMS message
+            let message = `NEW QUOTE REQUEST\n\n`;
+            message += `Name: ${name}\n`;
+            message += `Phone: ${phone}\n`;
+            message += `Address: ${address}\n`;
+            message += `Work Needed: ${description}\n`;
+            
+            if (uploadedPhotoData) {
+                message += `\nPhoto: Customer uploaded a photo (see text thread)\n`;
+            }
+            
+            // Open SMS app with pre-filled message
+            const smsLink = `sms:${companyPhone}?&body=${encodeURIComponent(message)}`;
+            window.location.href = smsLink;
+            
+            // Show confirmation
+            alert('Opening your messaging app... Send the message to submit your quote request!');
+        });
+
+        // CSS output click to select
+        cssOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        // Toggle admin panel with Alt+A
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                toggleAdmin();
+            }
+        });
+
+        function toggleAdmin() {
+            adminPanel.classList.toggle('active');
+        }
+
+        // Make functions globally available
+        window.showQuoteForm = showQuoteForm;
+        window.hideQuoteForm = hideQuoteForm;
+        window.toggleAdmin = toggleAdmin;
+    </script>
+</body>
+</html>
