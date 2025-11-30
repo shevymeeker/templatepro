@@ -342,9 +342,26 @@
                     </div>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Perfect! We've Got Everything.</h2>
-                <p class="text-xl text-gray-600 mb-8">I'll use these answers to build your custom site. Check your email for next steps!</p>
+                <p class="text-xl text-gray-600 mb-8">Now send me these answers so I can build your site:</p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <button onclick="emailAnswers()" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email These Answers
+                    </button>
+                    <button onclick="copyAnswers()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <span id="copyButtonText">Copy to Clipboard</span>
+                    </button>
+                </div>
+
                 <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 max-w-xl mx-auto">
-                    <h3 class="font-semibold text-gray-900 mb-3">📋 Your Answers (Copy & Save)</h3>
+                    <h3 class="font-semibold text-gray-900 mb-3">📋 Your Answers</h3>
                     <div id="answersSummary" class="text-left text-sm text-gray-700 space-y-2"></div>
                 </div>
             </div>
@@ -467,6 +484,60 @@
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        // Format answers as plain text
+        function formatAnswersText() {
+            let text = `CLIENT INTAKE FORM - NEW WEBSITE REQUEST\n`;
+            text += `==========================================\n\n`;
+            text += `Business Name: ${formData.businessName}\n\n`;
+            text += `What They Do:\n${formData.businessDescription}\n\n`;
+            text += `Main Services:\n`;
+            text += `1. ${formData.service1}\n`;
+            text += `2. ${formData.service2}\n`;
+            text += `3. ${formData.service3}\n\n`;
+            text += `Phone: ${formData.businessPhone}\n\n`;
+            if (formData.logo) {
+                text += `Logo: ✓ Uploaded (see attachment)\n\n`;
+            } else {
+                text += `Logo: No logo - use business name\n\n`;
+            }
+            if (formData.additionalInfo) {
+                text += `Additional Info:\n${formData.additionalInfo}\n\n`;
+            }
+            text += `==========================================\n`;
+            text += `Ready to generate copy and build the site!`;
+            return text;
+        }
+
+        // Copy to clipboard
+        function copyAnswers() {
+            const text = formatAnswersText();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyButtonText');
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy to Clipboard';
+                }, 2000);
+            }).catch(err => {
+                alert('Could not copy to clipboard. Please manually copy the text below.');
+                console.error('Copy failed:', err);
+            });
+        }
+
+        // Email answers
+        function emailAnswers() {
+            const text = formatAnswersText();
+            const subject = encodeURIComponent(`New Website Client: ${formData.businessName}`);
+            const body = encodeURIComponent(text);
+
+            // Note: You'll want to change YOUR_EMAIL_HERE to your actual email
+            const mailto = `mailto:YOUR_EMAIL_HERE?subject=${subject}&body=${body}`;
+            window.location.href = mailto;
+        }
+
+        // Make functions global
+        window.copyAnswers = copyAnswers;
+        window.emailAnswers = emailAnswers;
 
         // Initialize
         updateProgress();
