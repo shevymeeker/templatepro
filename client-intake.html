@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Build Your Site - Quick Start Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: block;
+            width: 100%;
+        }
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+        .file-upload-label.has-file {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-group {
+            display: none;
+        }
+        .question-group.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased bg-gray-50">
+
+    <!-- Hero Header -->
+    <div class="gradient-bg py-12 px-4 text-white">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="hero-title text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">
+                Let's Build Your Website
+            </h1>
+            <p class="text-xl text-white/90 mb-6 animate-fadeIn">
+                Just 6 quick questions. We'll handle the rest.
+            </p>
+            <div class="flex items-center justify-center gap-3 text-sm">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Takes 5 minutes</span>
+                </div>
+                <span class="text-white/50">•</span>
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>No wrong answers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Form -->
+    <div class="max-w-3xl mx-auto px-4 py-8 md:py-12">
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 animate-fadeIn">
+
+            <form id="intakeForm" class="space-y-8">
+
+                <!-- Question 1: Business Name -->
+                <div class="question-group active" data-question="1">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 1 OF 6</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            What's your business called?
+                        </h2>
+                        <p class="text-gray-600">This will be the main headline on your site</p>
+                    </div>
+                    <input
+                        type="text"
+                        id="businessName"
+                        class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition"
+                        placeholder="e.g., Joe's Landscaping"
+                        required
+                    >
+                    <button type="button" onclick="nextQuestion(2)" class="mt-6 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                        Continue →
+                    </button>
+                </div>
+
+                <!-- Question 2: What They Do -->
+                <div class="question-group" data-question="2">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 2 OF 6</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            What does your business do?
+                        </h2>
+                        <p class="text-gray-600">Keep it simple - one sentence is perfect</p>
+                    </div>
+                    <textarea
+                        id="businessDescription"
+                        rows="4"
+                        class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition resize-none"
+                        placeholder="e.g., We handle tough landscaping jobs other companies won't touch - overgrown yards, steep slopes, and emergency cleanups."
+                        required
+                    ></textarea>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="prevQuestion(1)" class="text-gray-600 hover:text-gray-900 px-6 py-4 rounded-xl font-semibold transition">
+                            ← Back
+                        </button>
+                        <button type="button" onclick="nextQuestion(3)" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                            Continue →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 3: Main Services -->
+                <div class="question-group" data-question="3">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 3 OF 6</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            What are your 3 main services?
+                        </h2>
+                        <p class="text-gray-600">Don't overthink it - just your top 3 things</p>
+                    </div>
+                    <div class="space-y-4">
+                        <input
+                            type="text"
+                            id="service1"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition"
+                            placeholder="Service 1: e.g., Overgrown lot clearing"
+                            required
+                        >
+                        <input
+                            type="text"
+                            id="service2"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition"
+                            placeholder="Service 2: e.g., Difficult terrain work"
+                            required
+                        >
+                        <input
+                            type="text"
+                            id="service3"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition"
+                            placeholder="Service 3: e.g., Emergency storm cleanup"
+                            required
+                        >
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="prevQuestion(2)" class="text-gray-600 hover:text-gray-900 px-6 py-4 rounded-xl font-semibold transition">
+                            ← Back
+                        </button>
+                        <button type="button" onclick="nextQuestion(4)" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                            Continue →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 4: Contact Phone -->
+                <div class="question-group" data-question="4">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 4 OF 6</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            Best phone number to reach you?
+                        </h2>
+                        <p class="text-gray-600">This will be on your website for customer inquiries</p>
+                    </div>
+                    <input
+                        type="tel"
+                        id="businessPhone"
+                        class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition"
+                        placeholder="(555) 555-5555"
+                        required
+                    >
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="prevQuestion(3)" class="text-gray-600 hover:text-gray-900 px-6 py-4 rounded-xl font-semibold transition">
+                            ← Back
+                        </button>
+                        <button type="button" onclick="nextQuestion(5)" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                            Continue →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 5: Logo -->
+                <div class="question-group" data-question="5">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 5 OF 6</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            Do you have a logo?
+                        </h2>
+                        <p class="text-gray-600">If yes, upload it. If not, we'll use your business name instead - both work great!</p>
+                    </div>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="logoFile" accept="image/*">
+                        <label for="logoFile" id="logoLabel" class="file-upload-label">
+                            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <div class="text-center">
+                                <span id="logoText" class="text-gray-700 font-medium">Click to upload logo</span>
+                                <span class="text-gray-500 text-sm block mt-1">PNG, JPG, or SVG</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="logoPreview" class="mt-4 hidden text-center">
+                        <img id="logoPreviewImg" src="" alt="Logo preview" class="max-h-32 mx-auto rounded-lg shadow-md">
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="prevQuestion(4)" class="text-gray-600 hover:text-gray-900 px-6 py-4 rounded-xl font-semibold transition">
+                            ← Back
+                        </button>
+                        <button type="button" onclick="nextQuestion(6)" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg">
+                            Continue (Skip Logo) →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 6: Anything Else -->
+                <div class="question-group" data-question="6">
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold text-purple-600">QUESTION 6 OF 6 - ALMOST DONE!</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2 mb-3">
+                            Anything else we should know?
+                        </h2>
+                        <p class="text-gray-600">Special requests, brand colors, inspiration sites, deadline - or leave it blank, totally fine!</p>
+                    </div>
+                    <textarea
+                        id="additionalInfo"
+                        rows="5"
+                        class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl transition resize-none"
+                        placeholder="Optional: Any special requests, colors you like, timeline, etc."
+                    ></textarea>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="prevQuestion(5)" class="text-gray-600 hover:text-gray-900 px-6 py-4 rounded-xl font-semibold transition">
+                            ← Back
+                        </button>
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg">
+                            Submit & Build My Site 🚀
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- Success State -->
+            <div id="successState" class="hidden text-center py-12">
+                <div class="mb-6">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Perfect! We've Got Everything.</h2>
+                <p class="text-xl text-gray-600 mb-8">Now send me these answers so I can build your site:</p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <button onclick="emailAnswers()" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email These Answers
+                    </button>
+                    <button onclick="copyAnswers()" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition shadow-lg flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <span id="copyButtonText">Copy to Clipboard</span>
+                    </button>
+                </div>
+
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 max-w-xl mx-auto">
+                    <h3 class="font-semibold text-gray-900 mb-3">📋 Your Answers</h3>
+                    <div id="answersSummary" class="text-left text-sm text-gray-700 space-y-2"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Trust Footer -->
+        <div class="text-center mt-8 text-gray-600 text-sm">
+            <p>🔒 Your information is private and will only be used to build your website</p>
+        </div>
+
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 6;
+        let formData = {};
+
+        // Logo upload handling
+        const logoFile = document.getElementById('logoFile');
+        const logoLabel = document.getElementById('logoLabel');
+        const logoText = document.getElementById('logoText');
+        const logoPreview = document.getElementById('logoPreview');
+        const logoPreviewImg = document.getElementById('logoPreviewImg');
+
+        logoFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                logoPreviewImg.src = event.target.result;
+                logoPreview.classList.remove('hidden');
+                logoLabel.classList.add('has-file');
+                logoText.innerHTML = '✓ Logo uploaded - looking good!';
+                formData.logo = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Question navigation
+        function showQuestion(num) {
+            document.querySelectorAll('.question-group').forEach(q => q.classList.remove('active'));
+            document.querySelector(`[data-question="${num}"]`).classList.add('active');
+            currentQuestion = num;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextQuestion(num) {
+            // Validate current question before moving forward
+            const currentGroup = document.querySelector(`[data-question="${currentQuestion}"]`);
+            const requiredInputs = currentGroup.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                    setTimeout(() => input.classList.remove('border-red-500'), 2000);
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+
+            if (isValid) {
+                showQuestion(num);
+            } else {
+                // Shake animation or alert
+                currentGroup.classList.add('animate-shake');
+                setTimeout(() => currentGroup.classList.remove('animate-shake'), 500);
+            }
+        }
+
+        function prevQuestion(num) {
+            showQuestion(num);
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Form submission
+        document.getElementById('intakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect all data
+            formData.businessName = document.getElementById('businessName').value;
+            formData.businessDescription = document.getElementById('businessDescription').value;
+            formData.service1 = document.getElementById('service1').value;
+            formData.service2 = document.getElementById('service2').value;
+            formData.service3 = document.getElementById('service3').value;
+            formData.businessPhone = document.getElementById('businessPhone').value;
+            formData.additionalInfo = document.getElementById('additionalInfo').value;
+
+            // Show success state
+            document.getElementById('intakeForm').classList.add('hidden');
+            document.getElementById('successState').classList.remove('hidden');
+
+            // Display summary
+            const summary = document.getElementById('answersSummary');
+            summary.innerHTML = `
+                <p><strong>Business Name:</strong> ${formData.businessName}</p>
+                <p><strong>What You Do:</strong> ${formData.businessDescription}</p>
+                <p><strong>Service 1:</strong> ${formData.service1}</p>
+                <p><strong>Service 2:</strong> ${formData.service2}</p>
+                <p><strong>Service 3:</strong> ${formData.service3}</p>
+                <p><strong>Phone:</strong> ${formData.businessPhone}</p>
+                ${formData.logo ? '<p><strong>Logo:</strong> ✓ Uploaded</p>' : ''}
+                ${formData.additionalInfo ? `<p><strong>Additional Info:</strong> ${formData.additionalInfo}</p>` : ''}
+            `;
+
+            // Here you would normally send to your backend
+            console.log('Form Data:', formData);
+
+            // Could also send via email or save to local storage
+            localStorage.setItem('clientIntakeData', JSON.stringify(formData));
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Format answers as plain text
+        function formatAnswersText() {
+            let text = `CLIENT INTAKE FORM - NEW WEBSITE REQUEST\n`;
+            text += `==========================================\n\n`;
+            text += `Business Name: ${formData.businessName}\n\n`;
+            text += `What They Do:\n${formData.businessDescription}\n\n`;
+            text += `Main Services:\n`;
+            text += `1. ${formData.service1}\n`;
+            text += `2. ${formData.service2}\n`;
+            text += `3. ${formData.service3}\n\n`;
+            text += `Phone: ${formData.businessPhone}\n\n`;
+            if (formData.logo) {
+                text += `Logo: ✓ Uploaded (see attachment)\n\n`;
+            } else {
+                text += `Logo: No logo - use business name\n\n`;
+            }
+            if (formData.additionalInfo) {
+                text += `Additional Info:\n${formData.additionalInfo}\n\n`;
+            }
+            text += `==========================================\n`;
+            text += `Ready to generate copy and build the site!`;
+            return text;
+        }
+
+        // Copy to clipboard
+        function copyAnswers() {
+            const text = formatAnswersText();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyButtonText');
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy to Clipboard';
+                }, 2000);
+            }).catch(err => {
+                alert('Could not copy to clipboard. Please manually copy the text below.');
+                console.error('Copy failed:', err);
+            });
+        }
+
+        // Email answers
+        function emailAnswers() {
+            const text = formatAnswersText();
+            const subject = encodeURIComponent(`New Website Client: ${formData.businessName}`);
+            const body = encodeURIComponent(text);
+
+            // Note: You'll want to change YOUR_EMAIL_HERE to your actual email
+            const mailto = `mailto:YOUR_EMAIL_HERE?subject=${subject}&body=${body}`;
+            window.location.href = mailto;
+        }
+
+        // Make functions global
+        window.copyAnswers = copyAnswers;
+        window.emailAnswers = emailAnswers;
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
