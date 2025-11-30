@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Quote Request</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --primary-rgb: 37, 99, 235;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--primary-color); }
+        .border-primary { border-color: var(--primary-color); }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .logo-preview {
+            max-height: 50px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: block;
+            width: 100%;
+        }
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 48px 24px;
+            border: 3px dashed #d1d5db;
+            border-radius: 16px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 220px;
+        }
+        .file-upload-label:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
+        .file-upload-label.has-file {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+            border-style: solid;
+        }
+
+        .photo-preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 340px;
+            z-index: 1000;
+            display: none;
+        }
+        .admin-panel.active { display: block; }
+
+        @media (max-width: 768px) {
+            .admin-panel {
+                width: calc(100% - 32px);
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+            }
+        }
+
+        textarea {
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+        }
+        .success-message.active { display: block; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+        }
+        .overlay.active { display: block; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--primary-color)',
+                        secondary: 'var(--secondary-color)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+
+    <!-- Simple Header -->
+    <nav class="bg-white/80 backdrop-blur-sm shadow-sm py-4 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 flex justify-center items-center">
+            <div id="logo-container" class="flex items-center">
+                <span id="navBrand" class="text-2xl font-bold text-gray-900">Your Company</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Form Container -->
+    <main class="py-8 px-4 pb-20">
+        <div class="max-w-2xl mx-auto">
+
+            <!-- Hero Section -->
+            <div class="text-center mb-12 animate-fadeIn">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                    Get Your Free Quote
+                </h1>
+                <p class="text-xl text-gray-600 leading-relaxed">
+                    Snap a photo, add your number. We'll handle the rest.
+                </p>
+                <div class="mt-6 inline-flex items-center gap-2 text-sm text-gray-500">
+                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Takes 30 seconds • No long forms • No commitment
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 animate-fadeIn">
+                <form id="quickQuoteForm" class="space-y-8">
+
+                    <!-- Photo Upload - Primary Action -->
+                    <div>
+                        <label class="block text-lg font-bold text-gray-900 mb-4">
+                            1. Show us what you need done
+                        </label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="jobPhoto" accept="image/*" capture="environment" required>
+                            <label for="jobPhoto" id="photoLabel" class="file-upload-label">
+                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <div class="text-center">
+                                    <span id="photoText" class="text-gray-700 font-semibold text-lg block">Tap to take or upload photo</span>
+                                    <span class="text-gray-500 text-sm mt-1 block">A picture tells us everything we need to know</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="photoPreview" class="mt-6 hidden text-center">
+                            <img id="previewImg" src="" alt="Preview" class="photo-preview-img mx-auto">
+                            <button type="button" onclick="clearPhoto()" class="mt-3 text-sm text-gray-600 hover:text-gray-900 underline">
+                                Change photo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Phone Number - Required -->
+                    <div>
+                        <label for="phone" class="block text-lg font-bold text-gray-900 mb-3">
+                            2. Best number to reach you
+                        </label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition"
+                            placeholder="(555) 555-5555"
+                            required
+                        >
+                        <p class="text-sm text-gray-500 mt-2">We'll text you a quote within a few hours</p>
+                    </div>
+
+                    <!-- Name - Optional but encouraged -->
+                    <div>
+                        <label for="name" class="block text-lg font-bold text-gray-900 mb-3">
+                            3. What should we call you? <span class="text-gray-400 font-normal text-base">(optional)</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition"
+                            placeholder="First name is fine"
+                        >
+                    </div>
+
+                    <!-- Quick Note - Optional -->
+                    <div>
+                        <label for="note" class="block text-lg font-bold text-gray-900 mb-3">
+                            4. Anything else we should know? <span class="text-gray-400 font-normal text-base">(optional)</span>
+                        </label>
+                        <textarea
+                            id="note"
+                            rows="3"
+                            class="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition resize-none"
+                            placeholder="Address, timing, special requests... or leave blank"
+                        ></textarea>
+                        <p class="text-sm text-gray-500 mt-2">No worries if you're not sure—we can discuss everything over text</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button
+                            type="submit"
+                            class="w-full btn-primary text-white px-8 py-5 rounded-xl font-bold text-xl shadow-lg"
+                        >
+                            Get My Free Quote →
+                        </button>
+                        <p class="text-center text-sm text-gray-500 mt-4">
+                            By submitting, you agree to receive a text message with your quote
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Trust Signals -->
+            <div class="mt-12 text-center space-y-4">
+                <div class="flex items-center justify-center gap-8 flex-wrap text-sm text-gray-600">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>No spam, ever</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>100% free quote</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Fast response</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Message Overlay -->
+    <div class="overlay" id="overlay"></div>
+    <div class="success-message" id="successMessage">
+        <div class="mb-4">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">Almost there!</h3>
+        <p class="text-gray-600 mb-6">Your messaging app should open. Just hit send to submit your quote request.</p>
+        <button onclick="closeSuccess()" class="text-primary font-semibold hover:underline">Close</button>
+    </div>
+
+    <!-- Admin Panel (Hidden, press Alt+A) -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-900 text-lg">Brand Manager</h3>
+            <button onclick="toggleAdmin()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Client Logo</label>
+        <input type="file" id="logoUpload" accept="image/*" class="block w-full text-sm text-gray-600 mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-primary hover:file:bg-primary hover:file:text-white file:transition file:cursor-pointer cursor-pointer">
+
+        <div id="colorPreview" class="hidden mb-4">
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <div id="primarySwatch" class="h-12 rounded-lg border-2 border-gray-200 shadow-sm"></div>
+                    <p class="text-xs text-gray-600 mt-1.5 font-medium">Primary</p>
+                </div>
+                <div>
+                    <div id="secondarySwatch" class="h-12 rounded-lg border-2 border-gray-200 shadow-sm"></div>
+                    <p class="text-xs text-gray-600 mt-1.5 font-medium">Secondary</p>
+                </div>
+            </div>
+        </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">Company Phone (SMS)</label>
+        <input type="tel" id="companyPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-primary" placeholder="(555) 555-5555">
+
+        <label class="block text-sm font-medium text-gray-700 mb-2">CSS Variables</label>
+        <textarea id="cssOutput" rows="5" class="w-full p-3 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-primary" readonly placeholder="Upload logo to generate..."></textarea>
+        <p class="text-xs text-gray-500 mt-2">Click to select and copy</p>
+    </div>
+
+    <script>
+        const colorThief = new ColorThief();
+        const logoUpload = document.getElementById('logoUpload');
+        const logoContainer = document.getElementById('logo-container');
+        const cssOutput = document.getElementById('cssOutput');
+        const colorPreview = document.getElementById('colorPreview');
+        const primarySwatch = document.getElementById('primarySwatch');
+        const secondarySwatch = document.getElementById('secondarySwatch');
+        const adminPanel = document.getElementById('adminPanel');
+        const jobPhotoInput = document.getElementById('jobPhoto');
+        const photoLabel = document.getElementById('photoLabel');
+        const photoText = document.getElementById('photoText');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewImg = document.getElementById('previewImg');
+        const quickQuoteForm = document.getElementById('quickQuoteForm');
+        const companyPhoneInput = document.getElementById('companyPhone');
+        const successMessage = document.getElementById('successMessage');
+        const overlay = document.getElementById('overlay');
+
+        let uploadedPhotoData = null;
+
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join('');
+        }
+
+        function adjustBrightness(hex, percent) {
+            const num = parseInt(hex.replace("#",""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+            const G = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + amt));
+            const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
+            return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Logo upload and color extraction
+        logoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.crossOrigin = "Anonymous";
+                img.onload = function() {
+                    // Display logo
+                    logoContainer.innerHTML = `<img src="${event.target.result}" class="logo-preview" alt="Logo">`;
+                    document.getElementById('navBrand').style.display = 'none';
+
+                    // Extract colors
+                    const dominantColor = colorThief.getColor(img);
+                    const palette = colorThief.getPalette(img, 5);
+
+                    const primaryHex = rgbToHex(...dominantColor);
+                    const secondaryHex = palette[1] ? rgbToHex(...palette[1]) : adjustBrightness(primaryHex, -25);
+
+                    const primaryRgb = hexToRgb(primaryHex);
+
+                    // Update CSS variables
+                    document.documentElement.style.setProperty('--primary-color', primaryHex);
+                    document.documentElement.style.setProperty('--secondary-color', secondaryHex);
+                    document.documentElement.style.setProperty('--primary-rgb', `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`);
+
+                    // Update swatches
+                    primarySwatch.style.backgroundColor = primaryHex;
+                    secondarySwatch.style.backgroundColor = secondaryHex;
+                    colorPreview.classList.remove('hidden');
+
+                    // Update CSS output
+                    cssOutput.value = `:root {\n  --primary-color: ${primaryHex};\n  --secondary-color: ${secondaryHex};\n  --primary-rgb: ${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b};\n}`;
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Photo upload preview
+        jobPhotoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                uploadedPhotoData = event.target.result;
+                previewImg.src = event.target.result;
+                photoPreview.classList.remove('hidden');
+                photoLabel.classList.add('has-file');
+                photoText.innerHTML = '<span class="text-green-600">✓ Photo added</span>';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function clearPhoto() {
+            jobPhotoInput.value = '';
+            uploadedPhotoData = null;
+            photoPreview.classList.add('hidden');
+            photoLabel.classList.remove('has-file');
+            photoText.innerHTML = '<span class="text-gray-700 font-semibold text-lg block">Tap to take or upload photo</span><span class="text-gray-500 text-sm mt-1 block">A picture tells us everything we need to know</span>';
+        }
+
+        // Form submission
+        quickQuoteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const phone = document.getElementById('phone').value;
+            const name = document.getElementById('name').value || 'New customer';
+            const note = document.getElementById('note').value;
+            const companyPhone = companyPhoneInput.value || '5555555555'; // Fallback
+
+            // Build SMS message
+            let message = `🔔 NEW QUOTE REQUEST\n\n`;
+            message += `Name: ${name}\n`;
+            message += `Phone: ${phone}\n`;
+
+            if (note.trim()) {
+                message += `\nNotes: ${note}\n`;
+            }
+
+            if (uploadedPhotoData) {
+                message += `\n📸 Customer uploaded a photo (see attachments)\n`;
+            }
+
+            message += `\n---\nSent via Quick Quote Form`;
+
+            // Show success message
+            successMessage.classList.add('active');
+            overlay.classList.add('active');
+
+            // Open SMS app with pre-filled message
+            setTimeout(() => {
+                const smsLink = `sms:${companyPhone}?&body=${encodeURIComponent(message)}`;
+                window.location.href = smsLink;
+            }, 500);
+        });
+
+        function closeSuccess() {
+            successMessage.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        // CSS output click to select
+        cssOutput.addEventListener('click', function() {
+            this.select();
+        });
+
+        // Toggle admin panel with Alt+A
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && e.key === 'a') {
+                e.preventDefault();
+                toggleAdmin();
+            }
+        });
+
+        function toggleAdmin() {
+            adminPanel.classList.toggle('active');
+        }
+
+        // Make functions globally available
+        window.clearPhoto = clearPhoto;
+        window.closeSuccess = closeSuccess;
+        window.toggleAdmin = toggleAdmin;
+    </script>
+</body>
+</html>
